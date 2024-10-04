@@ -4,15 +4,15 @@ export default function(){
 
     const nameDiv = document.createElement('div');
     nameDiv.setAttribute('class','name');
-    nameDiv.innerText = this.name;
+    nameDiv.innerText = this.getName;
 
     const costDiv = document.createElement('div');
     costDiv.setAttribute('class','cost');
-    costDiv.innerText = `$${this.cost}`;
+    costDiv.innerText = `$${this.getCost}`;
 
     const quantityDiv = document.createElement('div');
     quantityDiv.setAttribute('class','quantity');
-    quantityDiv.innerText = `${this.quantity} unit(s)`;
+    quantityDiv.innerText = `${this.getQuantity} unit(s)`;
 
     const discDiv = document.createElement('div');
     discDiv.setAttribute('class','discount');
@@ -45,7 +45,7 @@ export default function(){
     descBtn.innerText = 'Description';
     descBtn.addEventListener('click',  e => {
         e.preventDefault();
-        alert(`Description : ${this.description}`);
+        alert(`Description : ${this.getDesc}`);
     })
     descDiv.append(descBtn);
 
@@ -55,9 +55,9 @@ export default function(){
     buyBtn.innerText = 'Buy';
     buyBtn.addEventListener('click', e =>{
         e.preventDefault();
-        alert(`Buing : ${this.name}`);
+        alert(`Buing : ${this.getName}`);
     });
-    if(this.acceptingOrders === 'No'){
+    if(this.getAccept === 'No'){
         buyBtn.setAttribute('disabled','true'); 
     }
     btnDiv.append(buyBtn);

@@ -125,22 +125,45 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 class Product {
+  #name;
+  #cost;
+  #acceptingOrders;
+  #quantity;
+  #description;
+  #discount = 0;
+  static #tax = 12;
   constructor(name, cost, acceptingOrders, quantity, description) {
-    this.name = name;
-    this.cost = Number(cost);
-    this.acceptingOrders = acceptingOrders;
-    this.quantity = Number(quantity);
-    this.description = description;
+    this.#name = name;
+    this.#cost = Number(cost);
+    this.#acceptingOrders = acceptingOrders;
+    this.#quantity = Number(quantity);
+    this.#description = description;
   }
-  static tax = 12;
-  discount = 0;
+  #computeTax() {
+    return Product.#tax / 100 * this.#cost;
+  }
   set setDiscount(x) {
-    this.discount = x;
+    this.#discount = x;
   }
   get stockCost() {
-    let stockCost = (Product.tax / 100 * this.cost + this.cost) * this.quantity;
-    let discAmt = this.discount / 100 * stockCost;
-    return this.discount !== 0 ? stockCost - discAmt : stockCost;
+    let stockCost = (this.#computeTax() + this.#cost) * this.#quantity;
+    let discAmt = this.#discount / 100 * stockCost;
+    return this.#discount !== 0 ? stockCost - discAmt : stockCost;
+  }
+  get getName() {
+    return this.#name;
+  }
+  get getCost() {
+    return this.#cost;
+  }
+  get getQuantity() {
+    return this.#quantity;
+  }
+  get getAccept() {
+    return this.#acceptingOrders;
+  }
+  get getDesc() {
+    return this.#description;
   }
 }
 ;
@@ -157,13 +180,13 @@ function _default() {
   productCard.setAttribute('class', 'product');
   const nameDiv = document.createElement('div');
   nameDiv.setAttribute('class', 'name');
-  nameDiv.innerText = this.name;
+  nameDiv.innerText = this.getName;
   const costDiv = document.createElement('div');
   costDiv.setAttribute('class', 'cost');
-  costDiv.innerText = `$${this.cost}`;
+  costDiv.innerText = `$${this.getCost}`;
   const quantityDiv = document.createElement('div');
   quantityDiv.setAttribute('class', 'quantity');
-  quantityDiv.innerText = `${this.quantity} unit(s)`;
+  quantityDiv.innerText = `${this.getQuantity} unit(s)`;
   const discDiv = document.createElement('div');
   discDiv.setAttribute('class', 'discount');
   const inputBox = document.createElement('input');
@@ -192,7 +215,7 @@ function _default() {
   descBtn.innerText = 'Description';
   descBtn.addEventListener('click', e => {
     e.preventDefault();
-    alert(`Description : ${this.description}`);
+    alert(`Description : ${this.getDesc}`);
   });
   descDiv.append(descBtn);
   const btnDiv = document.createElement('div');
@@ -201,9 +224,9 @@ function _default() {
   buyBtn.innerText = 'Buy';
   buyBtn.addEventListener('click', e => {
     e.preventDefault();
-    alert(`Buing : ${this.name}`);
+    alert(`Buing : ${this.getName}`);
   });
-  if (this.acceptingOrders === 'No') {
+  if (this.getAccept === 'No') {
     buyBtn.setAttribute('disabled', 'true');
   }
   btnDiv.append(buyBtn);
@@ -241,6 +264,7 @@ addBtn.addEventListener('click', function () {
   const product = getFormContents();
   if (product) {
     const createProduct = new _Product.default(...product);
+    createProduct.name = "HACKED HE HE HEs";
     products.append(_RenderProduct.default.call(createProduct));
   }
   clearForm();
@@ -270,7 +294,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52047" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51163" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

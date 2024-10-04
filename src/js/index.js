@@ -29,7 +29,9 @@ addBtn.addEventListener('click', function () {
   const product = getFormContents();
   if(product){
     const createProduct = new Product(...product);
+    createProduct.name = "HACKED HE HE HEs"
     products.append(RenderProduct.call(createProduct));
   }
+  
   clearForm();
 });
