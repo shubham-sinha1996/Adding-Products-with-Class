@@ -1,5 +1,6 @@
 // Write your code here...
 import Product from "./Product";
+import RenderProduct from "./RenderProduct";
 
 const products = document.querySelector('.products');
 const nameInp = document.querySelector('input[name=name]');
@@ -10,6 +11,7 @@ const descriptionInp = document.querySelector('textarea[name=description]');
 const addBtn = document.querySelector('#addBtn');
 
 const getFormContents = () => {
+  
   if (nameInp.value !== '' && costInp.value > 0 && quantityInp.value > 0 && descriptionInp.value !== '') {
     return [nameInp.value, costInp.value, acceptingOrdersInp.value, quantityInp.value, descriptionInp.value];
   } else {
@@ -27,7 +29,7 @@ addBtn.addEventListener('click', function () {
   const product = getFormContents();
   if(product){
     const createProduct = new Product(...product);
-    products.append(createProduct.render());
+    products.append(RenderProduct.call(createProduct));
   }
   clearForm();
 });
