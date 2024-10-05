@@ -117,126 +117,215 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"js/Product.js":[function(require,module,exports) {
+})({"js/protectedKeys.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.nameSymbol = exports.descriptionSymbol = void 0;
+const descriptionSymbol = exports.descriptionSymbol = Symbol('description');
+const nameSymbol = exports.nameSymbol = Symbol('name');
+},{}],"js/Product.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
+var _protectedKeys = require("./protectedKeys");
 class Product {
-  #name;
   #cost;
   #acceptingOrders;
   #quantity;
-  #description;
   #discount = 0;
   static #tax = 12;
   constructor(name, cost, acceptingOrders, quantity, description) {
-    this.#name = name;
+    this[_protectedKeys.nameSymbol] = name;
     this.#cost = Number(cost);
     this.#acceptingOrders = acceptingOrders;
     this.#quantity = Number(quantity);
-    this.#description = description;
+    this[_protectedKeys.descriptionSymbol] = description;
   }
   #computeTax() {
     return Product.#tax / 100 * this.#cost;
   }
-  set setDiscount(x) {
-    this.#discount = x;
-  }
-  get stockCost() {
-    let stockCost = (this.#computeTax() + this.#cost) * this.#quantity;
-    let discAmt = this.#discount / 100 * stockCost;
-    return this.#discount !== 0 ? stockCost - discAmt : stockCost;
-  }
   get getName() {
-    return this.#name;
+    return this[_protectedKeys.nameSymbol];
   }
   get getCost() {
     return this.#cost;
   }
+  get getDescription() {
+    return this[_protectedKeys.descriptionSymbol];
+  }
+  get getAcceptingOrders() {
+    return this.#acceptingOrders;
+  }
   get getQuantity() {
     return this.#quantity;
   }
-  get getAccept() {
-    return this.#acceptingOrders;
+  get stockCost() {
+    let stockCost = (this.#computeTax() + this.#cost) * this.#quantity;
+    let discAmt = this.#discount / 100 * stockCost;
+    return this.discount !== 0 ? stockCost - discAmt : stockCost;
   }
-  get getDesc() {
-    return this.#description;
+  set setDiscount(x) {
+    this.#discount = x;
   }
 }
-;
 var _default = exports.default = Product;
-},{}],"js/RenderProduct.js":[function(require,module,exports) {
+},{"./protectedKeys":"js/protectedKeys.js"}],"js/Book.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _Product = _interopRequireDefault(require("./Product"));
+var _protectedKeys = require("./protectedKeys");
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+class Book extends _Product.default {
+  #author;
+  #isbn;
+  #genre;
+  #type = 'Book';
+  constructor(name, cost, acceptingOrders, quantity, description, author, isbn, genre) {
+    super(name, cost, acceptingOrders, quantity, description);
+    this.#author = author;
+    this.#isbn = isbn;
+    this.#genre = genre;
+  }
+  get getType() {
+    return this.#type;
+  }
+  get getDescription() {
+    return `
+        Description: ${this[_protectedKeys.descriptionSymbol]}
+        Author: ${this.#author}
+        ISBN: ${this.#isbn}
+        Genre: ${this.#genre}`;
+  }
+  get getName() {
+    return `${this[_protectedKeys.nameSymbol]} by ${this.#author}`;
+  }
+}
+var _default = exports.default = Book;
+},{"./Product":"js/Product.js","./protectedKeys":"js/protectedKeys.js"}],"js/Phone.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _Product = _interopRequireDefault(require("./Product"));
+var _protectedKeys = require("./protectedKeys");
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+class Phone extends _Product.default {
+  #os;
+  #ram;
+  #storage;
+  #color;
+  #type = 'Phone';
+  constructor(name, cost, acceptingOrders, quantity, description, os, ram, storage, color) {
+    super(name, cost, acceptingOrders, quantity, description);
+    this.#os = os;
+    this.#ram = ram;
+    this.#storage = storage;
+    this.#color = color;
+  }
+  get getType() {
+    return this.#type;
+  }
+  get getDescription() {
+    return `
+        Description: ${this[_protectedKeys.descriptionSymbol]}
+        OS: ${this.#os}
+        RAM: ${this.#ram} GB
+        Storage: ${this.#storage} GB
+        Color: ${this.#color}`;
+  }
+}
+var _default = exports.default = Phone;
+},{"./Product":"js/Product.js","./protectedKeys":"js/protectedKeys.js"}],"js/RenderProduct.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = _default;
-function _default() {
+function _default(obj) {
   const productCard = document.createElement('div');
   productCard.setAttribute('class', 'product');
   const nameDiv = document.createElement('div');
   nameDiv.setAttribute('class', 'name');
-  nameDiv.innerText = this.getName;
+
+  // Render icons based on obj.getType
+  const typeDiv = document.createElement('div');
+  typeDiv.setAttribute('class', 'type');
+  const iconMap = {
+    Book: `<span class="material-icons">auto_stories</span>`,
+    Phone: `<span class="material-icons">smartphone</span>`
+  };
+  typeDiv.innerHTML = iconMap[obj.getType] ?? '';
   const costDiv = document.createElement('div');
   costDiv.setAttribute('class', 'cost');
-  costDiv.innerText = `$${this.getCost}`;
   const quantityDiv = document.createElement('div');
   quantityDiv.setAttribute('class', 'quantity');
-  quantityDiv.innerText = `${this.getQuantity} unit(s)`;
-  const discDiv = document.createElement('div');
-  discDiv.setAttribute('class', 'discount');
-  const inputBox = document.createElement('input');
-  inputBox.setAttribute('type', 'number');
-  inputBox.setAttribute('name', 'discount');
-  inputBox.setAttribute('min', '0');
-  inputBox.setAttribute('max', '100');
-  inputBox.setAttribute('value', '0');
-  inputBox.addEventListener('keyup', e => {
+  const discountInpDiv = document.createElement('div');
+  discountInpDiv.setAttribute('class', 'discount');
+  const discInput = document.createElement('input');
+  discInput.setAttribute('type', 'number');
+  discInput.setAttribute('name', 'discount');
+  discInput.setAttribute('min', '0');
+  discInput.setAttribute('max', '100');
+  discInput.setAttribute('value', '0');
+  discInput.addEventListener('keyup', e => {
     e.preventDefault();
-    this.setDiscount = e.target.value;
+    obj.setDiscount = e.target.value;
   });
-  discDiv.append(inputBox);
-  const stockDiv = document.createElement('div');
-  stockDiv.setAttribute('class', 'stock-cost');
+  discountInpDiv.append(discInput);
+  const stockCost = document.createElement('div');
+  stockCost.setAttribute('class', 'stock-cost');
   const stockBtn = document.createElement('button');
   stockBtn.innerText = 'Stock Cost';
   stockBtn.addEventListener('click', e => {
     e.preventDefault();
-    alert(`Stock cost : $${this.stockCost}`);
+    alert(`Total Cost: $${obj.stockCost}`);
   });
-  stockDiv.append(stockBtn);
-  const descDiv = document.createElement('div');
-  descDiv.setAttribute('class', 'view-description');
-  const descBtn = document.createElement('button');
-  descBtn.innerText = 'Description';
-  descBtn.addEventListener('click', e => {
+  stockCost.append(stockBtn);
+  const viewDescDiv = document.createElement('div');
+  viewDescDiv.setAttribute('class', 'view-description');
+  const viewDescBtn = document.createElement('button');
+  viewDescBtn.innerText = 'Description';
+  viewDescBtn.addEventListener('click', e => {
     e.preventDefault();
-    alert(`Description : ${this.getDesc}`);
+    alert(obj.getDescription);
   });
-  descDiv.append(descBtn);
-  const btnDiv = document.createElement('div');
-  btnDiv.setAttribute('class', 'buy-btn');
+  viewDescDiv.append(viewDescBtn);
+  const buyBtnDiv = document.createElement('div');
+  buyBtnDiv.setAttribute('class', 'buy-btn');
   const buyBtn = document.createElement('button');
   buyBtn.innerText = 'Buy';
   buyBtn.addEventListener('click', e => {
     e.preventDefault();
-    alert(`Buing : ${this.getName}`);
+    alert(`Buying ${obj.getName}`);
   });
-  if (this.getAccept === 'No') {
-    buyBtn.setAttribute('disabled', 'true');
+  if (obj.getAcceptingOrders === 'No') {
+    buyBtn.setAttribute('disabled', true);
   }
-  btnDiv.append(buyBtn);
-  productCard.append(nameDiv, costDiv, quantityDiv, discDiv, stockDiv, descDiv, btnDiv);
+  buyBtnDiv.append(buyBtn);
+  nameDiv.innerText = obj.getName;
+  costDiv.innerText = `$${obj.getCost}`;
+  quantityDiv.innerText = `${obj.getQuantity} unit(s)`;
+  productCard.append(nameDiv, typeDiv, costDiv, quantityDiv, discountInpDiv, stockCost, viewDescDiv, buyBtnDiv);
   return productCard;
 }
 },{}],"js/index.js":[function(require,module,exports) {
 "use strict";
 
-var _Product = _interopRequireDefault(require("./Product"));
+var _Book = _interopRequireDefault(require("./Book"));
+var _Phone = _interopRequireDefault(require("./Phone"));
 var _RenderProduct = _interopRequireDefault(require("./RenderProduct"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // Write your code here...
@@ -248,9 +337,39 @@ const acceptingOrdersInp = document.querySelector('select[name=acceptingOrders]'
 const quantityInp = document.querySelector('input[name=quantity]');
 const descriptionInp = document.querySelector('textarea[name=description]');
 const addBtn = document.querySelector('#addBtn');
+const bookFormBtn = document.querySelector('#book-form-btn');
+const phoneFormBtn = document.querySelector('#phone-form-btn');
+const bookFields = document.querySelector('#book-fields');
+const phoneFields = document.querySelector('#phone-fields');
+const formTitle = document.querySelector('#form-title');
+// Book fields
+const author = document.querySelector('input[name=author]');
+const isbn = document.querySelector('input[name=isbn]');
+const genre = document.querySelector('select[name=genre]');
+// Phone fields
+const os = document.querySelector('select[name=os]');
+const ram = document.querySelector('input[name=ram]');
+const storage = document.querySelector('input[name=storage]');
+const color = document.querySelector('input[name=color]');
+let productType = 'book';
+bookFormBtn.addEventListener('click', () => {
+  bookFields.style.display = 'block';
+  phoneFields.style.display = 'none';
+  productType = 'book';
+  formTitle.innerText = 'Add a Book';
+});
+phoneFormBtn.addEventListener('click', () => {
+  bookFields.style.display = 'none';
+  phoneFields.style.display = 'block';
+  productType = 'phone';
+  formTitle.innerText = 'Add a Phone';
+});
 const getFormContents = () => {
-  if (nameInp.value !== '' && costInp.value > 0 && quantityInp.value > 0 && descriptionInp.value !== '') {
-    return [nameInp.value, costInp.value, acceptingOrdersInp.value, quantityInp.value, descriptionInp.value];
+  const productFieldsValidation = nameInp.value !== '' && costInp.value > 0 && quantityInp.value > 0 && descriptionInp.value !== '';
+  const extraFieldsValidation = productType === 'book' ? author.value !== '' && isbn.value !== '' : ram.value !== '' && storage.value !== '' && color.value !== '';
+  const extraFieldsVal = productType === 'book' ? [author.value, isbn.value, genre.value] : [os.value, ram.value, storage.value, color.value];
+  if (productFieldsValidation && extraFieldsValidation) {
+    return [nameInp.value, costInp.value, acceptingOrdersInp.value, quantityInp.value, descriptionInp.value, ...extraFieldsVal];
   } else {
     return false;
   }
@@ -259,17 +378,17 @@ const clearForm = () => {
   nameInp.value = descriptionInp.value = '';
   acceptingOrdersInp.value = 'Yes';
   costInp.value = quantityInp.value = 0;
+  productType === 'book' ? (author.value = '', isbn.value = '') : ram.value = '', storage.value = '', color.value = '';
 };
 addBtn.addEventListener('click', function () {
-  const product = getFormContents();
-  if (product) {
-    const createProduct = new _Product.default(...product);
-    createProduct.name = "HACKED HE HE HEs";
-    products.append(_RenderProduct.default.call(createProduct));
+  const getProduct = getFormContents();
+  if (getProduct) {
+    const newProduct = productType === 'book' ? new _Book.default(...getProduct) : new _Phone.default(...getProduct);
+    products.append((0, _RenderProduct.default)(newProduct));
   }
   clearForm();
 });
-},{"./Product":"js/Product.js","./RenderProduct":"js/RenderProduct.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./Book":"js/Book.js","./Phone":"js/Phone.js","./RenderProduct":"js/RenderProduct.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -294,7 +413,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51163" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52586" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

@@ -1,68 +1,82 @@
-export default function(){
-    const productCard = document.createElement('div');
-    productCard.setAttribute('class','product');
+export default function (obj) {
+  const productCard = document.createElement('div');
+  productCard.setAttribute('class', 'product');
 
-    const nameDiv = document.createElement('div');
-    nameDiv.setAttribute('class','name');
-    nameDiv.innerText = this.getName;
+  const nameDiv = document.createElement('div');
+  nameDiv.setAttribute('class', 'name');
 
-    const costDiv = document.createElement('div');
-    costDiv.setAttribute('class','cost');
-    costDiv.innerText = `$${this.getCost}`;
+  // Render icons based on obj.getType
+  const typeDiv = document.createElement('div');
+  typeDiv.setAttribute('class', 'type');
 
-    const quantityDiv = document.createElement('div');
-    quantityDiv.setAttribute('class','quantity');
-    quantityDiv.innerText = `${this.getQuantity} unit(s)`;
+  const iconMap = {
+    Book: `<span class="material-icons">auto_stories</span>`,
+    Phone: `<span class="material-icons">smartphone</span>`,
+  };
 
-    const discDiv = document.createElement('div');
-    discDiv.setAttribute('class','discount');
-    const inputBox = document.createElement('input');
-    inputBox.setAttribute('type','number');
-    inputBox.setAttribute('name','discount');
-    inputBox.setAttribute('min','0');
-    inputBox.setAttribute('max','100');
-    inputBox.setAttribute('value','0');
-    inputBox.addEventListener('keyup', e =>{
-        e.preventDefault();
-        this.setDiscount = e.target.value;
-    });
-    
-    discDiv.append(inputBox);
+  typeDiv.innerHTML = iconMap[obj.getType] ?? '';
 
-    const stockDiv = document.createElement('div');
-    stockDiv.setAttribute('class','stock-cost');
-    const stockBtn = document.createElement('button');
-    stockBtn.innerText = 'Stock Cost';
-    stockBtn.addEventListener('click',  e => {
-        e.preventDefault();
-        alert(`Stock cost : $${this.stockCost}`);
-    })
-    stockDiv.append(stockBtn);
+  const costDiv = document.createElement('div');
+  costDiv.setAttribute('class', 'cost');
 
-    const descDiv = document.createElement('div');
-    descDiv.setAttribute('class','view-description');
-    const descBtn = document.createElement('button');
-    descBtn.innerText = 'Description';
-    descBtn.addEventListener('click',  e => {
-        e.preventDefault();
-        alert(`Description : ${this.getDesc}`);
-    })
-    descDiv.append(descBtn);
+  const quantityDiv = document.createElement('div');
+  quantityDiv.setAttribute('class', 'quantity');
 
-    const btnDiv = document.createElement('div');
-    btnDiv.setAttribute('class','buy-btn');
-    const buyBtn = document.createElement('button');
-    buyBtn.innerText = 'Buy';
-    buyBtn.addEventListener('click', e =>{
-        e.preventDefault();
-        alert(`Buing : ${this.getName}`);
-    });
-    if(this.getAccept === 'No'){
-        buyBtn.setAttribute('disabled','true'); 
-    }
-    btnDiv.append(buyBtn);
+  const discountInpDiv = document.createElement('div');
+  discountInpDiv.setAttribute('class', 'discount');
 
-    productCard.append(nameDiv,costDiv,quantityDiv,discDiv,stockDiv,descDiv,btnDiv);
+  const discInput = document.createElement('input');
+  discInput.setAttribute('type', 'number');
+  discInput.setAttribute('name', 'discount');
+  discInput.setAttribute('min', '0');
+  discInput.setAttribute('max', '100');
+  discInput.setAttribute('value', '0');
+  discInput.addEventListener('keyup', (e) => {
+    e.preventDefault();
+    obj.setDiscount = e.target.value;
+  });
 
-    return productCard;
+  discountInpDiv.append(discInput);
+
+  const stockCost = document.createElement('div');
+  stockCost.setAttribute('class', 'stock-cost');
+
+  const stockBtn = document.createElement('button');
+  stockBtn.innerText = 'Stock Cost';
+  stockBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    alert(`Total Cost: $${obj.stockCost}`);
+  });
+  stockCost.append(stockBtn);
+
+  const viewDescDiv = document.createElement('div');
+  viewDescDiv.setAttribute('class', 'view-description');
+
+  const viewDescBtn = document.createElement('button');
+  viewDescBtn.innerText = 'Description';
+  viewDescBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    alert(obj.getDescription);
+  });
+  viewDescDiv.append(viewDescBtn);
+
+  const buyBtnDiv = document.createElement('div');
+  buyBtnDiv.setAttribute('class', 'buy-btn');
+
+  const buyBtn = document.createElement('button');
+  buyBtn.innerText = 'Buy';
+  buyBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    alert(`Buying ${obj.getName}`);
+  });
+  if (obj.getAcceptingOrders === 'No') {
+    buyBtn.setAttribute('disabled', true);
+  }
+  buyBtnDiv.append(buyBtn);
+  nameDiv.innerText = obj.getName;
+  costDiv.innerText = `$${obj.getCost}`;
+  quantityDiv.innerText = `${obj.getQuantity} unit(s)`;
+  productCard.append(nameDiv, typeDiv, costDiv, quantityDiv, discountInpDiv, stockCost, viewDescDiv, buyBtnDiv);
+
+  return productCard;
 }

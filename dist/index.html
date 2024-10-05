@@ -4,13 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JavaScript Playground</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="/style.78032849.css">
   <script src="/style.78032849.js"></script></head>
   <body>
     <div id="main">
       <h1>Products</h1>
-      <div id="add-product-form">
-        <h3>Add a Product</h3>
+      <div class="product-btn" id="book-form-btn">
+        <span class="material-icons book-btn">auto_stories</span>
+        <span class="btn-label">Book</span>
+      </div>
+      <div class="product-btn" id="phone-form-btn">
+        <span class="material-icons book-btn">smartphone</span>
+        <span class="btn-label">Phone</span>
+      </div>
+      <div class="add-product-form" id="book-form">
+        <h3 id="form-title">Add a Book</h3>
         <div class="form-element">
           <div class="label">Name</div>
           <div class="element"><input type="text" name="name"></div>
@@ -34,10 +43,58 @@
             <input type="number" name="quantity">
           </div>
         </div>
+
         <div class="form-element">
           <div class="label">Description</div>
           <div class="element">
             <textarea name="description"></textarea>
+          </div>
+        </div>
+        <div id="book-fields">
+          <div class="form-element">
+            <div class="label">Author</div>
+            <div class="element"><input type="text" name="author"></div>
+          </div>
+          <div class="form-element">
+            <div class="label">ISBN</div>
+            <div class="element"><input type="text" name="isbn"></div>
+          </div>
+          <div class="form-element">
+            <div class="label">Genre</div>
+            <div class="element">
+              <select name="genre">
+                <option>Fiction</option>
+                <option>Biography</option>
+                <option>Science Fiction</option>
+                <option>History</option>
+                <option>Journal</option>
+                <option>Religion</option>
+                <option>Poetry</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div id="phone-fields" class="hide-fields">
+          <div class="form-element">
+            <div class="label">OS</div>
+            <div class="element">
+              <select name="os">
+                <option>iOS</option>
+                <option>Android</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-element">
+            <div class="label">RAM (GB)</div>
+            <div class="element"><input type="number" name="ram"></div>
+          </div>
+          <div class="form-element">
+            <div class="label">Storage (GB)</div>
+            <div class="element"><input type="number" name="storage"></div>
+          </div>
+          <div class="form-element">
+            <div class="label">Color</div>
+            <div class="element"><input type="text" name="color"></div>
           </div>
         </div>
         <div class="form-element">
@@ -47,17 +104,19 @@
           </div>
         </div>
       </div>
+
       <div class="products">
         <!-- <div class="product">
           <div class="name">White Book</div>
           <div class="cost">$20</div>
-          <div class="quantity">20 unit(s)</div>
+          <div class="quantity">20 units</div>
+          <div class="discount"><input type="number" name="discount" /></div>
           <div class="stock-cost"><button>Stock Cost</button></div>
           <div class="view-description"><button>Description</button></div>
-          <div class="buy-btn"><button>Buy</button></div> -->
-        </div>
+          <div class="buy-btn"><button>Buy</button></div>
+        </div> -->
       </div>
-    
+    </div>
     <script type="module" src="/js.00a46daa.js"></script>
   </body>
 </html>
