@@ -1,6 +1,6 @@
 ## Product List Manager
 
-This project allows users to add products(Book/Phone) to a list by submitting a form. Each product displays its name, cost, quantity, total stock cost (including tax), description, and a "Buy" button that can be disabled based on whether the product is accepting orders. This project demonstrates the use of JavaScript classes, setter and getter methods, private fileds, inheritance and DOM manipulation.
+This project allows users to add products(Book/Phone) to a list by submitting a form. Each product displays its name, cost, quantity, total stock cost (including tax), description, and a "Buy" button that can be disabled based on whether the product is accepting orders. This project demonstrates the use of JavaScript classes, setter and getter methods, private fields, inheritance and DOM manipulation.
 
 ## Features
 
